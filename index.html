@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>영어 단어장 PRO++ Ultimate - 완전체 (회화 모드 추가됨)</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="container">
+        <h1>
+            <span id="headerTitle">📚 Vocabulary PRO++ 완전체</span>
+            <button class="dark-mode-toggle" id="langBtn" title="Switch Language" onclick="__forceToggleUILang()">🌐</button>
+            
+                        <button class="dark-mode-toggle" id="fullscreenBtn" title="Fullscreen">⛶</button>
+                        <button class="dark-mode-toggle" id="stageFsBtn" title="Study Fullscreen">▣</button>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()" id="themeBtn" title="다크모드 전환">🌙</button>
+        </h1>
+        
+        <div class="toggle-header" onclick="let c=this.nextElementSibling; c.style.display = c.style.display==='block'?'none':'block';">
+            📊 학습 통계 보기 (클릭)
+        </div>
+        <div class="toggle-content" id="statsPanel">
+            <div class="stats-grid">
+                <div class="stat-item"><div class="stat-value" id="todayCount">0</div><div class="stat-label">오늘 공부</div></div>
+                <div class="stat-item"><div class="stat-value" id="weekCount">0</div><div class="stat-label">이번 주</div></div>
+                <div class="stat-item"><div class="stat-value" id="memRate">0%</div><div class="stat-label">안정권 비율</div></div> <div class="stat-item"><div class="stat-value" id="quizRate">0%</div><div class="stat-label">퀴즈 정답률</div></div>
+                <div class="stat-item"><div class="stat-value"><span id="streakNum">0</span>🔥</div><div class="stat-label">연속 일수</div></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div><strong>최근 7일 공부량</strong><div id="weekChart" style="margin-top:10px;"></div></div>
+                <div><strong style="color:#e74c3c;">많이 틀린 TOP 5</strong><div id="topWrongList" style="font-size:13px; margin-top:10px;"></div></div>
+            </div>
+        </div>
+        
+        <div id="studyStage">
+            <div id="stageToolbar" class="stage-toolbar" aria-hidden="true">
+                <button class="stage-btn" id="stageExitBtn" title="Exit">✕</button>
+                <button class="stage-btn" id="stageLangBtn" title="Language Toggle">🌐</button>
+                <button class="stage-btn" id="stageFontMinus" title="Font -" onclick="__forceStageFont(-4)">A−</button>
+                <button class="stage-btn" id="stageFontPlus" title="Font +" onclick="__forceStageFont(4)">A+</button>
+                <button class="stage-btn" id="stageSettingsBtn" title="Options">⚙</button>
+            </div>
+
+        <div class="settings">
+            <!-- 설정 표시 토글 체크박스 -->
+            <div class="setting-group" style="background: var(--bg-card); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+                <label style="font-weight: bold; margin-right: 8px;" id="label_settings_display">⚙️ 설정 표시:</label>
+                <input type="checkbox" id="showBasicSettings" checked onchange="toggleSettings(this)"> <label id="label_basic_settings">기본 설정</label>
+                <input type="checkbox" id="showStudySettings" checked onchange="toggleSettings(this)"> <label id="label_flicker">깜박이</label>
+                <input type="checkbox" id="showReadingSettings" checked onchange="toggleSettings(this)"> <label id="label_reading_writing">독해/영작</label>
+                <input type="checkbox" id="showQuizSettings" onchange="toggleSettings(this)"> <label id="label_quiz_mode">퀴즈 모드</label>
+                <input type="checkbox" id="showSrsSettings" onchange="toggleSettings(this)"> <label id="label_srs_mode">SRS 모드</label>
+                <input type="checkbox" id="showDialogSettings" onchange="toggleSettings(this)"> <label id="label_dialog_mode">회화 모드</label>
+                <input type="checkbox" id="showShadowSettings" onchange="toggleSettings(this)"> <label id="label_shadowing">쉐도잉</label>
+            </div>
+            
+            <div class="setting-group">
+                <button class="btn btn-blue" onclick="document.getElementById('fileInput').click()" style="font-size: 15px;">📂 파일 로드 (자동감지)</button>
+                <input type="file" id="fileInput" style="display:none" accept=".txt" onchange="try{window.FileLoader&&FileLoader.loadFile&&FileLoader.loadFile(event)}catch(e){try{document.getElementById('stMsg').innerText='❌ FileLoader missing'}catch(_){} }">
+                <button class="btn" style="background:#e67e22; font-size:15px;" onclick="window.PDFLoader&&PDFLoader.triggerPdfInput()">📄 PDF 로드</button>
+                
+                <button class="btn" style="background:#8e44ad;" onclick="exportData()">세이브</button>
+                <button class="btn" style="background:#2980b9;" onclick="document.getElementById('importInput').click()">로드</button>
+                <input type="file" id="importInput" style="display:none" accept=".json" onchange="importData(this)">
+                <input type="checkbox" id="autoSpeak" checked> <label>자동 발음</label>
+            </div>
+            
+            <!-- 🌍 학습 언어 선택 -->
+            <div class="setting-group" style="background: var(--bg-tertiary); padding: 10px; border-radius: 6px;">
+                <label style="font-weight: bold;" id="label_study_lang">🌍 학습 언어:</label>
+                <select id="studyLangSelect" onchange="changeStudyLanguage()" style="width:150px; margin-left:10px;">
+                    <option value="en">English</option>
+                    <option value="ja">日本語 (Japanese)</option>
+                    <option value="zh">中文 (Chinese)</option>
+                    <option value="es">Español (Spanish)</option>
+                    <option value="de">Deutsch (German)</option>
+                    <option value="fr">Français (French)</option>
+                    <option value="it">Italiano (Italian)</option>
+                    <option value="pt">Português (Portuguese)</option>
+                    <option value="ru">Русский (Russian)</option>
+                    <option value="ar">العربية (Arabic)</option>
+                    <option value="ko">한국어 (Korean)</option>
+                </select>
+            </div>
+            
+            <!-- 공통 TTS 설정 -->
+            <div class="setting-group" style="background: var(--bg-tertiary); padding: 10px; border-radius: 6px;">
+                <label style="font-weight: bold;">🎤 TTS 설정:</label>
+                <select id="voiceSelect" style="width:180px; margin-left:10px;"></select>
+                <label style="margin-left:10px;">속도:</label>
+                <input type="number" id="ttsRate" value="1.0" step="0.1" min="0.5" max="2.0" style="width:50px;">
+                <label style="margin-left:10px;">피치:</label>
+                <input type="number" id="ttsPitch" value="1.0" step="0.1" min="0.5" max="2.0" style="width:50px;">
+            </div>
+            <!-- 기본 설정 영역 -->
+            <div id="basicOpt">
+                <div class="setting-group">
+                    <label>범위:</label>
+                    <input type="number" id="startIdx" value="1" oninput="clearCache()"> ~ <input type="number" id="endIdx" value="300" oninput="clearCache()">
+                </div>
+                <div class="setting-group">
+                    <input type="checkbox" id="unmemOnly" onchange="clearCache()"> <label>미테스트</label>
+                    <input type="checkbox" id="wrongOnly" onchange="clearCache()"> <label>별표</label>
+                    <input type="checkbox" id="starOnly" onchange="clearCache()"> <label>안정권</label>
+                </div>
+                
+                <div class="setting-group" style="padding-bottom: 8px; border-bottom: 1px dashed var(--border-color);">
+                    <label style="font-weight: bold; color: var(--accent-color); margin-right: 15px;">🎨 컬러 강조 설정:</label>
+                    <input type="checkbox" id="toggleColorLearning" onchange="updateDisplay()"> <label style="color: var(--color-learning);">학습 중</label>
+                    <input type="checkbox" id="toggleColorWrong" onchange="updateDisplay()"> <label style="color: var(--color-wrong);">별표</label>
+                    <input type="checkbox" id="toggleColorSafe" onchange="updateDisplay()"> <label style="color: var(--color-safe);">안정권</label>
+                </div>
+            </div>
+            <div id="studyOpt" class="setting-group">
+                <label>깜빡이 속도:</label> <input type="number" id="wordSpeed" value="2.0" step="0.1">
+                <label style="margin-left:10px;">크기:</label> <input type="number" id="fontSize" value="38" oninput="updateDisplay()">
+            </div>
+            
+            <div id="readingOpt" class="setting-group">
+                <label style="font-weight: bold; color: #17a2b8; margin-right: 15px;">🎓 독해/영작 모드</label>
+
+                <label>모드:</label>
+                <select id="readingMode" onchange="updateReadingMode()">
+                    <option value="off">꺼짐</option>
+                    <option value="eng-kor">독해모드 (앞→뒤)</option>
+                    <option value="kor-eng">영작모드 (뒤→앞)</option>
+                </select>
+                
+                <span id="thinkTimeContainer" style="display:none; margin-left:10px;">
+                    <label>생각시간:</label>
+                    <input type="number" id="thinkTime" value="7" step="0.5" min="1" max="60" style="width:55px;"> 초
+                    
+                    <label style="margin-left:10px;">답보는시간:</label>
+                    <input type="number" id="answerTime" value="3" step="0.5" min="1" max="60" style="width:55px;"> 초
+                    
+                    <button id="manualAnswerBtn" onclick="showManualAnswer()" class="btn btn-blue" style="display:none; margin-left:10px; padding: 6px 12px;">👁️ 답보기</button>
+                </span>
+            </div>
+            
+            <div id="quizOpt" class="setting-group" style="display:none;">
+                <label>방향:</label>
+                <input type="radio" name="quizDirection" id="engToKor" checked onchange="clearCache()"> <label>앞→뒤</label> 
+                <input type="radio" name="quizDirection" id="korToEng" onchange="clearCache()"> <label>뒤→앞</label> 
+                <input type="radio" name="quizDirection" id="mixedDir" onchange="clearCache()"> <label>혼합</label>
+                
+                <label style="margin-left:10px;">문항수:</label> <input type="number" id="quizCount" value="20" oninput="clearCache()">
+                <label style="margin-left:10px;">오답대기:</label> <input type="number" id="quizDelay" value="1.0" step="0.1">
+
+                <input type="checkbox" id="shuffle" checked onchange="clearCache()" style="margin-left:10px;"> <label>섞기</label>
+                <input type="checkbox" id="hint" checked> <label>정답표시</label>
+                
+                <div style="width:100%; height:1px; background-color: var(--border-color); margin: 8px 0;"></div>
+                
+                <label style="font-weight: bold; color: var(--danger-color); margin-right: 15px;">별표 복습:</label>
+                <input type="checkbox" id="wrongRevive" onchange="updateDisplay(); clearCache();"> <label>포함</label> 
+                <label style="margin-left:10px;">기준일:</label>
+                <input type="number" id="wrongDays" value="7" min="1" max="30" oninput="clearCache()"> <label>일 전</label>
+            </div>
+            <div id="srsOpt" class="setting-group" style="display:none;">
+                <label><strong><span class="lang-kr">🔄 SRS 설정</span><span class="lang-en">🔄 SRS Settings</span></strong></label><br>
+                <input type="checkbox" id="srsNewOnly" checked onchange="clearCache()"> <label>새 단어 포함</label>
+                <input type="checkbox" id="srsHardOnly" onchange="clearCache()"> <label>어려운 단어 우선</label><br>
+                <label style="margin-top:8px;">간격 배율:</label>
+                <select id="easeMode" onchange="clearCache()">
+                    <option value="2.5">표준 (×2.5)</option>
+                    <option value="2.0">빠름 (×2.0)</option>
+                    <option value="3.0">느림 (×3.0)</option>
+                    <option value="custom">커스텀</option>
+                </select>
+                <span id="customEaseInput" style="display:none;">
+                    <input type="number" id="customEase" value="2.5" step="0.1" min="1.2" max="5.0" style="width:50px;">
+                </span>
+                <label style="margin-left:10px;">실패 시 감소:</label>
+                <select id="lapseMode">
+                    <option value="0.0">리셋 (1일로)</option>
+                    <option value="0.2">20% 유지</option>
+                    <option value="0.5">50% 유지</option>
+                </select>
+            </div>
+
+            <div id="dialogOpt" class="setting-group" style="display:none;">
+                <label style="font-weight: bold; color: var(--color-dialog-a); margin-right: 15px;">🗣️ 회화 모드 설정</label>
+                <input type="checkbox" id="dialogShowBoth" onchange="updateDisplay()"> <label>AB 동시 표시</label>
+                
+                <div style="width:100%; height:1px; background-color: var(--border-color); margin: 8px 0;"></div>
+                
+                <label>A 역할 (컴):</label> 
+                <select id="dialogRoleA">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                </select>
+                
+                <label style="margin-left:10px;">B 역할 (나):</label> 
+                <select id="dialogRoleB">
+                    <option value="B">B</option>
+                    <option value="A">A</option>
+                </select>
+
+                <label style="margin-left:10px;">컴퓨터 대기:</label> 
+                <input type="number" id="dialogCompSpeed" value="3.0" step="0.1" min="0"> 초
+                <label style="font-size:11px; color:var(--text-secondary);">(0=수동)</label>
+
+                <label style="margin-left:10px;">사용자 대기:</label> 
+                <input type="number" id="dialogUserSpeed" value="3.0" step="0.1" min="0"> 초
+                <label style="font-size:11px; color:var(--text-secondary);">(0=수동)</label>
+
+                <div style="width:100%; height:1px; background-color: var(--border-color); margin: 8px 0;"></div>
+                <div id="dialogFileStatus" style="width:100%; font-size:13px; color: var(--accent-color);"></div>
+            </div>
+            <!-- Shadowing Settings -->
+            <div id="shadowOpt" class="setting-group" style="display:none; background: var(--bg-tertiary); padding: 10px; border-radius: 6px; margin-top:8px;">
+                <div style="font-weight:bold; margin-bottom:6px;">🎧 쉐도잉</div>
+                <label><input type="checkbox" id="shadowingMode"> 쉐도잉 활성화 (AB를 컴퓨터가 모두 읽음)</label>
+
+                <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                    <span>내 따라읽기 시간:</span>
+                    <input type="number" id="shadowMyTime" value="3.0" step="0.1" min="0" style="width:70px;"> <span>초</span>
+
+                    <span style="margin-left:10px;">🔁 A-B 반복횟수:</span>
+                    <input type="checkbox" id="shadowLoop" style="transform: scale(1.1);">
+                    <input type="number" id="shadowLoopCount" value="2" step="1" min="0" style="width:55px;" title="0=무한반복">
+                    <span style="font-size:11px; color:var(--text-secondary);">(체크=반복 / 0=무한 / 숫자=횟수)</span>
+
+                    <button id="shadowFinishBtn" class="btn" style="background:#2c3e50; display:none;" onclick="finishShadowing()">마무리</button>
+                </div>
+
+                <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                    <span style="min-width:80px;">읽기 속도(rate):</span>
+                    <input type="number" id="shadowRate" value="1.0" step="0.05" min="0.5" max="2.0" style="width:80px;" oninput="document.getElementById('shadowRateA').value=this.value; document.getElementById('shadowRateB').value=this.value;">
+                    <!-- 하위호환 숨김 -->
+                    <input type="hidden" id="shadowRateA" value="1.0">
+                    <input type="hidden" id="shadowRateB" value="1.0">
+                    <span style="font-size:11px; color:var(--text-secondary);">※ voice/pitch는 기존 설정 사용</span>
+                </div>
+
+                <div style="margin-top:8px; font-size:12px; color:var(--text-secondary); line-height:1.4;">
+                    - 쉐도잉 ON이면 회화모드 역할(A/B)과 무관하게 A와 B를 모두 컴퓨터가 읽습니다.<br>
+                    - 화면 표시(AB 동시/순차)는 기존 토글 그대로 사용합니다.<br>
+                    - 내 시간(초) = 컴퓨터가 한 문장 읽고 끝난 뒤, 내가 따라 읽는 순수 시간입니다.
+                </div>
+            </div>
+
+            </div>
+
+        <div class="flash-card">
+            <div id="mainDisplay" class="main-text">파일을 선택해 주세요</div>
+            <div id="subDisplay" class="sub-text"></div>
+            <div id="quizArea" class="quiz-options" style="display:none;"></div>
+            <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-gray" onclick="prevCard()">이전</button>
+            <button id="startBtn" class="btn btn-green" onclick="startApp()">시작/계속 (Space)</button>
+            <button class="btn btn-blue" onclick="currentIndex=0; startApp()">🔄 처음부터</button>
+            <button class="btn" style="background:#6f42c1;" onclick="openListView()">모아보기</button>
+            <button id="stopBtn" class="btn btn-red" onclick="stopApp()" disabled>정지 (Space)</button>
+            <button class="btn btn-gray" onclick="nextCard()">다음</button>
+            <button class="btn" style="background:#17a2b8;" onclick="toggleMem()">외움 (Ent)</button>
+        </div>
+        <div class="status"><span id="stMsg">준비 완료</span><span id="cntMsg">0 / 0</span><span id="timerMsg" style="margin-left:20px;"></span></div>
+        </div>
+    </div>
+
+    <div id="listModal" class="modal">
+        <div class="modal-content">
+            <h3 style="text-align:center;">단어 모아보기</h3>
+            <div style="text-align:right; margin-bottom:10px; font-size:13px;">
+                <label>자동 재생 초수:</label> <input type="number" id="listSpeed" value="3.0" step="0.1">
+                <span id="listPageInfo" style="margin-left:10px;">0 / 0</span>
+            </div>
+            <table class="data-table">
+                <tbody id="listTbody"></tbody>
+            </table>
+            <div style="text-align:center; margin-top:20px;">
+                <button class="btn btn-gray" onclick="moveListPage(-1)">이전</button>
+                <button id="listPlayBtn" class="btn btn-green" onclick="toggleListAuto()">재생</button>
+                <button class="btn btn-gray" onclick="moveListPage(1)">다음</button>
+                <button class="btn" style="background:#333;" onclick="closeListView()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <h3 style="text-align:center;">퀴즈 리포트</h3>
+            <div id="repSum" style="text-align:center; font-weight:bold; margin-bottom:15px; font-size:18px;"></div>
+            <table class="data-table">
+                <thead><tr><th>단어</th><th>정답</th><th>결과</th><th>발음</th></tr></thead>
+                <tbody id="repTbody"></tbody>
+            </table>
+            <div style="text-align:center; margin-top:20px;">
+                <button class="btn btn-blue" onclick="document.getElementById('reportModal').style.display='none'">확인 완료</button>
+            </div>
+        </div>
+    </div>
+
+    
+<!-- [CLEANUP] Removed legacy inline mega-script to prevent duplicate declarations. -->
+
+
+  <!-- Scripts - 의존성 순서 기준 로드 -->
+  <script src="js/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/i18n_data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/tts.js"></script>
+  <script src="js/parser.js"></script>
+  <script src="js/app_pool.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/srs.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/dom_cache.js"></script>
+  <script src="js/ui_render_core.js"></script>
+  <script src="js/ui_render.js"></script>
+
+  <!-- 신규 분리 파일 -->
+  <script src="js/data_io.js"></script> <!-- clearCache, saveLocal 등 (가장 먼저, 다른 모듈이 참조) -->
+  <script src="js/ui_stats.js"></script> <!-- updateStats, logStudy, renderReport -->
+  <script src="js/ui_nav.js"></script> <!-- getCurrentMode, nextCard, toggleMem 등 -->
+  <script src="js/engine_shadow.js"></script> <!-- shadowTimer, shadowStopFlag 등 (engine_study보다 먼저) -->
+  <script src="js/engine_dialog.js"></script> <!-- runDialog, nextDialogLine -->
+  <script src="js/engine_study.js"></script> <!-- startApp, stopApp (shadow/dialog 참조) -->
+
+  <!-- 기존 유지 파일 -->
+  <script src="js/dialog.js"></script>
+  <script src="js/shadow.js"></script>
+  <script src="js/app_bootstrap.js"></script>
+  <script src="js/engine_quiz.js"></script>
+  <script src="js/app_impl.js"></script>
+  <script src="js/post_export.js"></script>
+<!-- B안 1차: Quiz/SRS 모듈 분리 (알고리즘부터) -->
+
+<!-- VTEST_BOOTSTRAP -->
+
+  <!-- Adapters (Phase 1 - Step 5) -->
+  <script src="js/services/i18n-service.js"></script>
+  <script src="js/utils/file-loader.js"></script>
+
+
+  <!-- index.html 끝부분에 단일 스크립트만 -->
+  <script src="js/main.js"></script>
+<script src="js/pdf_loader.js"></script>
+</body>
+</html>
