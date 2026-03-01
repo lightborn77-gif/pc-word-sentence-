@@ -45,7 +45,7 @@
         <div class="settings">
             <!-- 설정 표시 토글 체크박스 -->
             <div class="setting-group" style="background: var(--bg-card); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
-                <label style="font-weight: bold; margin-right: 8px;" id="label_settings_display">⚙️ 설정 표시:</label>
+                <label style="font-weight: bold; margin-right: 3px;" id="label_settings_display">⚙️ 설정:</label>
                 <input type="checkbox" id="showBasicSettings" checked onchange="toggleSettings(this)"> <label id="label_basic_settings">기본 설정</label>
                 <input type="checkbox" id="showStudySettings" checked onchange="toggleSettings(this)"> <label id="label_flicker">깜박이</label>
                 <input type="checkbox" id="showReadingSettings" checked onchange="toggleSettings(this)"> <label id="label_reading_writing">독해/영작</label>
@@ -69,7 +69,7 @@
             <!-- 🌍 학습 언어 선택 -->
             <div class="setting-group" style="background: var(--bg-tertiary); padding: 10px; border-radius: 6px;">
                 <label style="font-weight: bold;" id="label_study_lang">🌍 학습 언어:</label>
-                <select id="studyLangSelect" onchange="changeStudyLanguage()" style="width:150px; margin-left:10px;">
+                <select id="studyLangSelect" onchange="changeStudyLanguage()" style="width:150px; margin-left:4px;">
                     <option value="en">English</option>
                     <option value="ja">日本語 (Japanese)</option>
                     <option value="zh">中文 (Chinese)</option>
@@ -87,10 +87,10 @@
             <!-- 공통 TTS 설정 -->
             <div class="setting-group" style="background: var(--bg-tertiary); padding: 10px; border-radius: 6px;">
                 <label style="font-weight: bold;">🎤 TTS 설정:</label>
-                <select id="voiceSelect" style="width:180px; margin-left:10px;"></select>
-                <label style="margin-left:10px;">속도:</label>
+                <select id="voiceSelect" style="width:180px; margin-left:4px;"></select>
+                <label style="margin-left:4px;">속도:</label>
                 <input type="number" id="ttsRate" value="1.0" step="0.1" min="0.5" max="2.0" style="width:50px;">
-                <label style="margin-left:10px;">피치:</label>
+                <label style="margin-left:4px;">피치:</label>
                 <input type="number" id="ttsPitch" value="1.0" step="0.1" min="0.5" max="2.0" style="width:50px;">
             </div>
             <!-- 기본 설정 영역 -->
@@ -106,7 +106,7 @@
                 </div>
                 
                 <div class="setting-group" style="padding-bottom: 8px; border-bottom: 1px dashed var(--border-color);">
-                    <label style="font-weight: bold; color: var(--accent-color); margin-right: 15px;">🎨 컬러 강조 설정:</label>
+                    <label style="font-weight: bold; color: var(--accent-color); margin-right:6px;">🎨 컬러 강조 설정:</label>
                     <input type="checkbox" id="toggleColorLearning" onchange="updateDisplay()"> <label style="color: var(--color-learning);">학습 중</label>
                     <input type="checkbox" id="toggleColorWrong" onchange="updateDisplay()"> <label style="color: var(--color-wrong);">별표</label>
                     <input type="checkbox" id="toggleColorSafe" onchange="updateDisplay()"> <label style="color: var(--color-safe);">안정권</label>
@@ -114,11 +114,11 @@
             </div>
             <div id="studyOpt" class="setting-group">
                 <label>깜빡이 속도:</label> <input type="number" id="wordSpeed" value="2.0" step="0.1">
-                <label style="margin-left:10px;">크기:</label> <input type="number" id="fontSize" value="38" oninput="updateDisplay()">
+                <label style="margin-left:4px;">크기:</label> <input type="number" id="fontSize" value="38" oninput="updateDisplay()">
             </div>
             
             <div id="readingOpt" class="setting-group">
-                <label style="font-weight: bold; color: #17a2b8; margin-right: 15px;">🎓 독해/영작 모드</label>
+                <label style="font-weight: bold; color: #17a2b8; margin-right:6px;">🎓 독해/영작 모드</label>
 
                 <label>모드:</label>
                 <select id="readingMode" onchange="updateReadingMode()">
@@ -127,14 +127,14 @@
                     <option value="kor-eng">영작모드 (뒤→앞)</option>
                 </select>
                 
-                <span id="thinkTimeContainer" style="display:none; margin-left:10px;">
+                <span id="thinkTimeContainer" style="display:none; margin-left:4px;">
                     <label>생각시간:</label>
                     <input type="number" id="thinkTime" value="7" step="0.5" min="1" max="60" style="width:55px;"> 초
                     
-                    <label style="margin-left:10px;">답보는시간:</label>
+                    <label style="margin-left:4px;">답보는시간:</label>
                     <input type="number" id="answerTime" value="3" step="0.5" min="1" max="60" style="width:55px;"> 초
                     
-                    <button id="manualAnswerBtn" onclick="showManualAnswer()" class="btn btn-blue" style="display:none; margin-left:10px; padding: 6px 12px;">👁️ 답보기</button>
+                    <button id="manualAnswerBtn" onclick="showManualAnswer()" class="btn btn-blue" style="display:none; margin-left:4px; padding: 6px 12px;">👁️ 답보기</button>
                 </span>
             </div>
             
@@ -144,17 +144,17 @@
                 <input type="radio" name="quizDirection" id="korToEng" onchange="clearCache()"> <label>뒤→앞</label> 
                 <input type="radio" name="quizDirection" id="mixedDir" onchange="clearCache()"> <label>혼합</label>
                 
-                <label style="margin-left:10px;">문항수:</label> <input type="number" id="quizCount" value="20" oninput="clearCache()">
-                <label style="margin-left:10px;">오답대기:</label> <input type="number" id="quizDelay" value="1.0" step="0.1">
+                <label style="margin-left:4px;">문항수:</label> <input type="number" id="quizCount" value="20" oninput="clearCache()">
+                <label style="margin-left:4px;">오답대기:</label> <input type="number" id="quizDelay" value="1.0" step="0.1">
 
-                <input type="checkbox" id="shuffle" checked onchange="clearCache()" style="margin-left:10px;"> <label>섞기</label>
+                <input type="checkbox" id="shuffle" checked onchange="clearCache()" style="margin-left:4px;"> <label>섞기</label>
                 <input type="checkbox" id="hint" checked> <label>정답표시</label>
                 
                 <div style="width:100%; height:1px; background-color: var(--border-color); margin: 8px 0;"></div>
                 
-                <label style="font-weight: bold; color: var(--danger-color); margin-right: 15px;">별표 복습:</label>
+                <label style="font-weight: bold; color: var(--danger-color); margin-right:6px;">별표 복습:</label>
                 <input type="checkbox" id="wrongRevive" onchange="updateDisplay(); clearCache();"> <label>포함</label> 
-                <label style="margin-left:10px;">기준일:</label>
+                <label style="margin-left:4px;">기준일:</label>
                 <input type="number" id="wrongDays" value="7" min="1" max="30" oninput="clearCache()"> <label>일 전</label>
             </div>
             <div id="srsOpt" class="setting-group" style="display:none;">
@@ -171,7 +171,7 @@
                 <span id="customEaseInput" style="display:none;">
                     <input type="number" id="customEase" value="2.5" step="0.1" min="1.2" max="5.0" style="width:50px;">
                 </span>
-                <label style="margin-left:10px;">실패 시 감소:</label>
+                <label style="margin-left:4px;">실패 시 감소:</label>
                 <select id="lapseMode">
                     <option value="0.0">리셋 (1일로)</option>
                     <option value="0.2">20% 유지</option>
@@ -180,7 +180,7 @@
             </div>
 
             <div id="dialogOpt" class="setting-group" style="display:none;">
-                <label style="font-weight: bold; color: var(--color-dialog-a); margin-right: 15px;">🗣️ 회화 모드 설정</label>
+                <label style="font-weight: bold; color: var(--color-dialog-a); margin-right:6px;">🗣️ 회화 모드 설정</label>
                 <input type="checkbox" id="dialogShowBoth" onchange="updateDisplay()"> <label>AB 동시 표시</label>
                 
                 <div style="width:100%; height:1px; background-color: var(--border-color); margin: 8px 0;"></div>
@@ -191,17 +191,17 @@
                     <option value="B">B</option>
                 </select>
                 
-                <label style="margin-left:10px;">B 역할 (나):</label> 
+                <label style="margin-left:4px;">B 역할 (나):</label> 
                 <select id="dialogRoleB">
                     <option value="B">B</option>
                     <option value="A">A</option>
                 </select>
 
-                <label style="margin-left:10px;">컴퓨터 대기:</label> 
+                <label style="margin-left:4px;">컴퓨터 대기:</label> 
                 <input type="number" id="dialogCompSpeed" value="3.0" step="0.1" min="0"> 초
                 <label style="font-size:11px; color:var(--text-secondary);">(0=수동)</label>
 
-                <label style="margin-left:10px;">사용자 대기:</label> 
+                <label style="margin-left:4px;">사용자 대기:</label> 
                 <input type="number" id="dialogUserSpeed" value="3.0" step="0.1" min="0"> 초
                 <label style="font-size:11px; color:var(--text-secondary);">(0=수동)</label>
 
@@ -217,7 +217,7 @@
                     <span>내 따라읽기 시간:</span>
                     <input type="number" id="shadowMyTime" value="3.0" step="0.1" min="0" style="width:70px;"> <span>초</span>
 
-                    <span style="margin-left:10px;">🔁 A-B 반복횟수:</span>
+                    <span style="margin-left:4px;">🔁 A-B 반복횟수:</span>
                     <input type="checkbox" id="shadowLoop" style="transform: scale(1.1);">
                     <input type="number" id="shadowLoopCount" value="2" step="1" min="0" style="width:55px;" title="0=무한반복">
                     <span style="font-size:11px; color:var(--text-secondary);">(체크=반복 / 0=무한 / 숫자=횟수)</span>
