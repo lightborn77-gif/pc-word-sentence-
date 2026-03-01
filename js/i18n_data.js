@@ -14,7 +14,7 @@ window.UI_TEXT = {
                 label_top_wrong: '많이 틀린 TOP 5',
                 
                 // 설정 표시
-                label_settings_display: '⚙️ 설정 표시:',
+                label_settings_display: '⚙️ 설정:',
                 label_basic_settings: '기본 설정',
                 label_flicker: '깜박이',
                 label_reading_writing: '독해/영작',
@@ -182,7 +182,7 @@ window.UI_TEXT = {
                 label_top_wrong: 'Most Missed TOP 5',
                 
                 // 설정 표시
-                label_settings_display: '⚙️ Settings Display:',
+                label_settings_display: '⚙️ Settings:',
                 label_basic_settings: 'Basic',
                 label_flicker: 'Flicker',
                 label_reading_writing: 'Reading/Writing',
